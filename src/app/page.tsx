@@ -19,7 +19,7 @@ export default function Home() {
         {routines.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col bg-green-300 rounded-xl w-full px-8 py-4"
+            className="flex flex-col bg-green-300 rounded-xl w-full px-12 py-8"
           >
             <h2>{item}</h2>
           </div>
