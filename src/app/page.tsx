@@ -3,9 +3,11 @@
 import { useState } from "react";
 
 export default function Home() {
+  // TODO: define a type Routine instead of using a string.
   const [routineTitle, setRoutineTitle] = useState("");
   const [routines, setRoutines] = useState<string[]>([]);
 
+  // TODO: limit the number of routines to 5.
   const handleAddRoutine = () => {
     if (routineTitle.trim() !== "") {
       setRoutines([...routines, routineTitle]);
@@ -13,6 +15,7 @@ export default function Home() {
     }
   };
 
+  // TODO: make each routine clickable to display the content of the routine.
   const renderRoutines = () => {
     return (
       <>
