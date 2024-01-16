@@ -2,16 +2,39 @@
 
 import { useState } from "react";
 
-export default function Home() {
-  // TODO: define a type Routine instead of using a string.
-  const [routineTitle, setRoutineTitle] = useState("");
-  const [routines, setRoutines] = useState<string[]>([]);
+type Routine = {
+  title: string;
+  id: number;
+  todos: RoutineTodo[];
+};
 
-  // TODO: limit the number of routines to 5.
+type RoutineTodo = {
+  title: string;
+  state: boolean;
+  id: number;
+  step: number;
+};
+
+export default function Home() {
+  const [routineTitle, setRoutineTitle] = useState("");
+  const [currentRoutineIndex, setCurrentRoutineIndex] = useState(0);
+  const [routinesStore, setRoutinesStore] = useState<Routine[]>([]);
+
   const handleAddRoutine = () => {
+    // Limit the number of routines to 5.
+    if (currentRoutineIndex === 5) {
+      return;
+    }
+
     if (routineTitle.trim() !== "") {
-      setRoutines([...routines, routineTitle]);
+      const routine: Routine = {
+        title: routineTitle,
+        id: currentRoutineIndex,
+        todos: [],
+      };
+      setRoutinesStore([...routinesStore, routine]);
       setRoutineTitle("");
+      setCurrentRoutineIndex(currentRoutineIndex + 1);
     }
   };
 
@@ -19,12 +42,18 @@ export default function Home() {
   const renderRoutines = () => {
     return (
       <>
-        {routines.map((item, index) => (
+        {routinesStore.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col bg-green-300 rounded-xl w-full px-12 py-8"
+            className="flex flex-col bg-green-300 rounded-xl w-full gap-8 px-12 py-8"
           >
-            <h2>{item}</h2>
+            <h2 className="text-xl">{item.title}</h2>
+            <div className="flex gap-4">
+              <button className="bg-blue-400 rounded-xl px-8 py-4">View</button>
+              <button className="bg-red-300 rounded-xl px-8 py-4">
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </>
@@ -36,6 +65,9 @@ export default function Home() {
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm flex flex-col gap-8 bg-gray-50 px-4 py-8 rounded-xl text-black">
         <div className="flex flex-col w-full items-start">
           <h1 className="text-4xl mb-4">Routines</h1>
+          <p className="text-gray-600 mb-4">
+            You can only add up to 5 routines. Keep it small, simple.
+          </p>
           <div className="flex flex-col gap-2 w-full">{renderRoutines()}</div>
         </div>
         <input
